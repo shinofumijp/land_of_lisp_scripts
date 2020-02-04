@@ -1,0 +1,5 @@
+out/*
+!out/.keep
+
+*.swp
+.DS_Store
