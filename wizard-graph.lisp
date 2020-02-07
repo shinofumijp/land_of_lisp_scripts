@@ -14,4 +14,5 @@
 (progn
    (princ "input filename >")
    (let ((fname (concatenate 'string "out/" (read-line))))
-     (graph->png fname *wizard-nodes* *wizard-edges*)))
+     (graph->png fname *wizard-nodes* *wizard-edges*)
+     (ugraph->png (concatenate 'string fname "-ugraph") *wizard-nodes* *wizard-edges*)))
