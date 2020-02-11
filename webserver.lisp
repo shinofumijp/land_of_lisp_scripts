@@ -75,7 +75,17 @@
         (princ "<html><form>What is your name?<input name='name' />
                </form></html>")
         (format t "<html>Nice to meet you, ~a!</html>" (cdr name))))
-               (progn (format t "HTTP/1.0 404 OK~C~C" #\return #\linefeed)
+               (progn (format t "HTTP/1.0 404 NotFound~C~C" #\return #\linefeed)
                       (format t "Content-Type: text/html~C~C" #\return #\linefeed)
                       (format t "~C~C" #\return #\linefeed)
                       (princ "Sorry. I don't know that page"))))
+
+(defun print-header (status)
+  (cond ((equal status 200)
+         (format t "HTTP/1.0 200 OK~C~C" #\return #\linefeed))
+        ((equal status 400)
+         (format t "HTTP/1.0 400 BadRequest~C~C" #\return #\linefeed))
+        ((equal status 404)
+         (format t "HTTP/1.0 404 NotFound~C~C" #\return #\linefeed)))
+  (format t "Content-Type: text/html~C~C" #\return #\linefeed)
+  (format t "~C~C" #\return #\linefeed))
