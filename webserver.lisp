@@ -45,8 +45,8 @@
     (when h
       (cons h (get-header stream)))))
 
-(defun get-content-params (stream headers)
-  (let ((length (cdr (assoc 'content-length headers))))
+(defun get-content-params (stream header)
+  (let ((length (cdr (assoc 'content-length header))))
     (when length
       (let ((content (make-string (parse-integer length))))
         (read-sequence content stream)
@@ -68,8 +68,14 @@
 (defun hello-request-handler (path header params)
   (if (equal path "greeting")
     (let ((name (assoc 'name params)))
+      (format t "HTTP/1.0 200 OK~C~C" #\return #\linefeed)
+      (format t "Content-Type: text/html~C~C" #\return #\linefeed)
+      (format t "~C~C" #\return #\linefeed)
       (if (not name)
         (princ "<html><form>What is your name?<input name='name' />
-</form></html>")
+               </form></html>")
         (format t "<html>Nice to meet you, ~a!</html>" (cdr name))))
-               (princ "Sorry. I don't know that page")))
+               (progn (format t "HTTP/1.0 404 OK~C~C" #\return #\linefeed)
+                      (format t "Content-Type: text/html~C~C" #\return #\linefeed)
+                      (format t "~C~C" #\return #\linefeed)
+                      (princ "Sorry. I don't know that page"))))
